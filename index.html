@@ -3,459 +3,86 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f0e8">
-  <meta name="description" content="Портфолио Telegram-ботов, автоматизации и инструментов для работы с данными.">
-  <title>Портфолио — автоматизация и Telegram-боты</title>
-  <!-- Зачем: первый экран должен вести к доступному примеру и не обещать невидимые шаги сценария.
-       Основание: критика Sol 28.09; приёмка 28.09 подтвердила 39 текстовых фрагментов на 375, 390 и 1440 px. -->
-  <style>
-    :root {
-      color-scheme: light;
-      --бумага: #f4f0e8;
-      --поверхность: #fbfaf6;
-      --чернила: #202824;
-      --текст-вторичный: #5b645c;
-      --акцент: #cde94a;
-      --линия: #d4cec2;
-      --сигнал: #99442f;
-      --ширина: 1160px;
-      --шаг: clamp(1.25rem, 4vw, 3.5rem);
-      --пружина: cubic-bezier(.22, .8, .22, 1);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      min-width: 320px;
-      background: var(--бумага);
-      color: var(--чернила);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 16px;
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-    a { color: inherit; text-decoration-thickness: .08em; text-underline-offset: .18em; }
-    a:hover { text-decoration-thickness: .14em; }
-    a:focus-visible, summary:focus-visible {
-      outline: 3px solid var(--сигнал);
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-    img { display: block; max-width: 100%; }
-    p, h1, h2, h3, figure { margin: 0; }
-    .обёртка { width: min(var(--ширина), calc(100% - 2 * var(--шаг))); margin-inline: auto; }
-    .пропуск {
-      position: absolute;
-      inset: 8px auto auto 8px;
-      z-index: 2;
-      padding: .7rem 1rem;
-      transform: translateY(-160%);
-      background: var(--чернила);
-      color: var(--поверхность);
-    }
-    .пропуск:focus { transform: translateY(0); }
-    .метка {
-      display: inline-flex;
-      align-items: center;
-      padding-left: .95rem;
-      background: radial-gradient(circle, var(--акцент) 0 50%, transparent 55%) left center / .55rem .55rem no-repeat;
-      font: 600 .72rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-    .метка::before { display: none; content: none; }
-    .шапка {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      min-height: 76px;
-      border-bottom: 1px solid var(--линия);
-    }
-    .знак {
-      display: inline-flex;
-      align-items: center;
-      gap: .7rem;
-      font: 700 .78rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
-      letter-spacing: .08em;
-      text-decoration: none;
-      text-transform: uppercase;
-    }
-    .знак__точка { width: .7rem; height: .7rem; border-radius: 50%; background: var(--акцент); }
-    .навигация { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(.8rem, 2.8vw, 2.2rem); }
-    .навигация a { font-size: .9rem; text-decoration: none; }
-    .навигация a:hover { text-decoration: underline; }
-
-    .первый-экран {
-      display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(240px, .75fr);
-      align-items: center;
-      gap: clamp(2rem, 7vw, 6rem);
-      padding-block: clamp(3.5rem, 9vw, 8rem) clamp(4rem, 8vw, 7rem);
-    }
-    .первый-экран__текст { max-width: 720px; }
-    .первый-экран h1 {
-      max-width: 100%;
-      margin-top: 1.4rem;
-      font: 400 clamp(3.5rem, 7vw, 6rem)/.98 Georgia, "Times New Roman", serif;
-      letter-spacing: -.055em;
-      overflow-wrap: normal;
-    }
-    .первый-экран__вводный {
-      max-width: 42rem;
-      margin-top: 1.5rem;
-      color: var(--текст-вторичный);
-      font-size: clamp(1.02rem, 1.8vw, 1.25rem);
-    }
-    .действия { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
-    .кнопка {
-      display: inline-flex;
-      min-height: 48px;
-      align-items: center;
-      justify-content: center;
-      gap: .7rem;
-      padding: .7rem 1rem;
-      border: 1px solid var(--чернила);
-      border-radius: 2px;
-      background: var(--чернила);
-      color: var(--поверхность);
-      font-weight: 650;
-      text-decoration: none;
-      transition: transform 240ms var(--пружина), background-color 240ms var(--пружина), color 240ms var(--пружина);
-    }
-    .кнопка:hover { transform: translateY(-2px); background: var(--акцент); color: var(--чернила); }
-    .кнопка--тихая { background: transparent; color: var(--чернила); }
-    .кнопка--тихая:hover { background: var(--поверхность); }
-    .фото-пример { position: relative; justify-self: center; width: min(100%, 310px); }
-    .фото-пример::before {
-      position: absolute;
-      top: 6rem;
-      right: -1rem;
-      width: 40%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: var(--акцент);
-      content: "";
-    }
-    .фото-пример__рамка {
-      position: relative;
-      padding: .8rem;
-      border: 1px solid var(--линия);
-      border-radius: 18px;
-      background: var(--поверхность);
-      box-shadow: 0 22px 60px rgb(32 40 36 / 10%);
-    }
-    .фото-пример img {
-      width: 100%;
-      max-height: 570px;
-      border-radius: 12px;
-      object-fit: contain;
-      background: #e8e5dc;
-    }
-    .фото-пример figcaption { margin-bottom: .8rem; color: var(--текст-вторичный); font-size: .78rem; }
-    .фото-пример figcaption strong { color: var(--чернила); font-weight: 650; }
-
-    .раздел { padding-block: clamp(3.5rem, 8vw, 7rem); border-top: 1px solid var(--линия); }
-    .раздел__шапка {
-      display: grid;
-      grid-template-columns: minmax(0, .8fr) minmax(15rem, .65fr);
-      align-items: end;
-      gap: 2rem;
-      margin-bottom: clamp(2rem, 5vw, 4rem);
-    }
-    .раздел h2 {
-      max-width: 12ch;
-      margin-top: .8rem;
-      font: 400 clamp(2.7rem, 6vw, 5.4rem)/.98 Georgia, "Times New Roman", serif;
-      letter-spacing: -.05em;
-    }
-    .раздел__вводный { max-width: 32rem; color: var(--текст-вторичный); }
-    #работы > .раздел__шапка { margin-bottom: 1.25rem; }
-    .сетка-работ { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-    .работа {
-      display: flex;
-      min-width: 0;
-      flex-direction: column;
-      padding: clamp(1.2rem, 2.8vw, 2rem);
-      border: 1px solid var(--линия);
-      background: var(--поверхность);
-    }
-    .работа--широкая { grid-column: 1 / -1; }
-    .работа__тип {
-      display: inline-flex;
-      width: fit-content;
-      align-items: center;
-      gap: .5rem;
-      padding: .28rem .55rem;
-      background: #ece9df;
-      color: var(--текст-вторичный);
-      font: 600 .68rem/1.3 ui-monospace, SFMono-Regular, Consolas, monospace;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .работа__тип--прототип { background: #f2e6df; color: var(--сигнал); }
-    .работа h3 {
-      max-width: 24ch;
-      margin-top: 1.55rem;
-      font: 400 clamp(1.55rem, 2.8vw, 2.3rem)/1.08 Georgia, "Times New Roman", serif;
-      letter-spacing: -.025em;
-    }
-    .работа__описание { margin-top: .9rem; }
-    .работа__доказательство, .работа__граница {
-      margin-top: 1.25rem;
-      padding-top: .85rem;
-      border-top: 1px solid var(--линия);
-      color: var(--текст-вторичный);
-      font-size: .88rem;
-    }
-    .работа__доказательство strong, .работа__граница strong { color: var(--чернила); }
-    .работа__граница { margin-top: .75rem; padding-top: 0; border-top: 0; }
-    .пример-ссылки { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.2rem; }
-    .пример-ссылки a {
-      display: inline-flex;
-      min-height: 42px;
-      align-items: center;
-      padding: .5rem .7rem;
-      border: 1px solid var(--линия);
-      border-radius: 2px;
-      background: var(--бумага);
-      font-size: .82rem;
-      font-weight: 620;
-      overflow-wrap: anywhere;
-      text-decoration: none;
-    }
-    .пример-ссылки a:hover { border-color: var(--чернила); background: var(--акцент); }
-    .работа__снимок { display: flex; align-items: center; gap: clamp(1rem, 5vw, 3rem); }
-    .работа__снимок img { width: min(100%, 220px); max-height: 420px; border-radius: 12px; object-fit: contain; background: #e8e5dc; }
-    .работа__снимок-текст { max-width: 40rem; }
-    .подробности-работ, .подробности-исполнителя { margin-block: 1rem; border-block: 1px solid var(--линия); }
-    .подробности-исполнителя { padding-block: 1rem; }
-    .подробности-работ summary, .подробности-исполнителя summary { min-height: 48px; padding: .85rem .2rem; cursor: pointer; font-weight: 650; }
-    .подробности-работ[open] .принятые-тексты { padding-block: 1rem 2rem; }
-    .работа__превью { margin-top: 1rem; }
-    .работа__превью img { width: min(100%, 680px); max-height: 380px; object-fit: contain; object-position: left; border: 1px solid var(--линия); }
-    .работа__превью figcaption { margin-top: .45rem; color: var(--текст-вторичный); font-size: .82rem; }
-    .принятые-тексты blockquote { margin: 1rem 0; padding-left: 1rem; border-left: 3px solid var(--акцент); color: var(--текст-вторичный); }
-
-    .подвал {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: end;
-      gap: 2rem;
-      padding-block: 2rem 3rem;
-      border-top: 1px solid var(--линия);
-      color: var(--текст-вторичный);
-      font-size: .86rem;
-    }
-    .подвал__ссылки { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--чернила); }
-    .подвал__ссылки a { text-underline-offset: .2em; }
-    .подвал__оговорка { max-width: 48rem; margin-top: .6rem; }
-
-
-    .принятые-тексты { max-width: 68rem; margin-inline: auto; }
-    .принятые-тексты h3 { margin: 2.8rem 0 .8rem; font: 400 clamp(1.8rem, 4vw, 2.6rem)/1.08 Georgia, "Times New Roman", serif; letter-spacing: -.035em; scroll-margin-top: 1rem; }
-    .принятые-тексты h3:first-child { margin-top: 0; }
-    .принятые-тексты h4 { margin: 1.6rem 0 .35rem; font-size: 1rem; }
-    .принятые-тексты p, .принятые-тексты li { max-width: 65ch; }
-    .принятые-тексты ul { padding-left: 1.3rem; }
-    .пример-снимок { width: min(100%, 260px); margin: 1rem 0 1.5rem; }
-    .пример-снимок img { display: block; width: 100%; height: auto; border-radius: 14px; }
-    .пример-снимок figcaption { margin-top: .45rem; color: var(--текст-вторичный); font-size: .85rem; }
-    .заголовок-других-работ { margin: clamp(3rem, 7vw, 5rem) 0 1rem; font: 400 clamp(1.8rem, 4vw, 2.6rem)/1.08 Georgia, "Times New Roman", serif; }
-    .блок-исполнителя { padding-top: 1rem; }
-    .текст-исполнителя { max-width: 68rem; margin-inline: auto; }
-    .текст-исполнителя h2 { margin: 0 0 1rem; font: 400 clamp(1.8rem, 4vw, 2.6rem)/1.08 Georgia, "Times New Roman", serif; }
-    .текст-исполнителя h2, .текст-исполнителя h3 { scroll-margin-top: 1rem; }
-    .текст-исполнителя p { max-width: 72ch; }
-
-    @media (max-width: 760px) {
-      .шапка { min-height: 68px; }
-      .навигация { gap: .85rem; }
-      .навигация a { font-size: .82rem; }
-      .первый-экран { grid-template-columns: 1fr; gap: 2.5rem; padding-block: 3.5rem 4rem; }
-      .первый-экран h1 { max-width: 100%; font-size: clamp(3.25rem, 15vw, 5.4rem); }
-      .фото-пример { justify-self: start; width: min(72vw, 300px); margin-left: .5rem; }
-      .раздел__шапка { grid-template-columns: 1fr; gap: 1rem; }
-      .сетка-работ { grid-template-columns: 1fr; }
-      .работа--широкая { grid-column: auto; }
-      .работа__снимок { align-items: flex-start; }
-      .подвал { grid-template-columns: 1fr; align-items: start; }
-    }
-    @media (max-width: 430px) {
-      .шапка { align-items: flex-start; flex-direction: column; padding-block: .9rem; }
-      .навигация { width: 100%; justify-content: space-between; }
-      .первый-экран h1 { font-size: clamp(2.5rem, 12vw, 3.3rem); }
-      .работа__снимок { flex-direction: column; }
-      .работа__снимок img { width: min(100%, 210px); }
-      .пример-ссылки { flex-direction: column; align-items: stretch; }
-      .пример-ссылки a { justify-content: space-between; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
-    }
-  </style>
+  <meta name="theme-color" content="#f5f3ec">
+  <title>Partialis — боты, скрипты и автоматизация рутины</title>
+  <meta name="description" content="Telegram-боты, скрипты обработки данных и интеграции для повторяющихся процессов.">
+  <link rel="stylesheet" href="стиль.css">
 </head>
 <body>
-  <a class="пропуск" href="#основное">Перейти к содержанию</a>
-  <header class="шапка обёртка">
-    <a class="знак" href="#начало" aria-label="В начало страницы"><span class="знак__точка" aria-hidden="true"></span> Портфолио / разработка</a>
-    <nav class="навигация" aria-label="Основная навигация">
-      <a href="#работы">Работы</a>
-      <a href="#об-исполнителе">Об исполнителе</a>
-      <a href="#связь">Связь</a>
-    </nav>
+  <header class="шапка">
+    <a class="логотип" href="#начало" aria-label="Partialis — в начало"><span class="логотип-знак">p.</span><span>partialis</span></a>
+    <nav aria-label="Основная навигация"><a href="#решения">Что делаю</a><a href="#работы">Работы</a><a href="#процесс">Как работаю</a></nav>
+    <a class="шапка-контакт" href="https://t.me/Partialis" target="_blank" rel="noopener">Написать <span aria-hidden="true">↗</span></a>
   </header>
-  <main id="основное" class="обёртка">
-    <section id="начало" class="первый-экран" aria-labelledby="заголовок">
-      <div class="первый-экран__текст">
-        <span class="метка">Telegram-боты · автоматизация · данные</span>
-        <h1 id="заголовок">Автоматизирую повторяющиеся рабочие процессы.</h1>
-        <p class="первый-экран__вводный">Задача в каждом случае одна — убрать ручную работу там, где она воспроизводится по одному и тому же сценарию.</p>
-        <div class="действия">
-          <a class="кнопка" href="#пример-сценария">Посмотреть пример <span aria-hidden="true">↓</span></a>
-          <a class="кнопка кнопка--тихая" href="#связь">Обсудить задачу <span aria-hidden="true">↗</span></a>
-        </div>
+  <main>
+    <section class="герой" id="начало" aria-labelledby="заголовок">
+      <div class="герой-текст">
+        <!-- ТЕКСТ:первый-экран:начало -->
+<p class="надстрочник"><span class="точка"></span> Автоматизация рутины</p><h1 id="заголовок">Автоматизация рутины: боты, скрипты, таблицы</h1><div class="герой-описание"><p>Разрабатываю Telegram-ботов, скрипты обработки данных и интеграции — чтобы повторяющуюся работу можно было передать коду.</p></div>
+<!-- ТЕКСТ:первый-экран:конец -->
+        <div class="действия"><a class="кнопка кнопка-тёмная" href="https://t.me/Partialis" target="_blank" rel="noopener">Обсудить задачу <span class="кнопка-стрелка" aria-hidden="true">↗</span></a><a class="текстовая-ссылка" href="#работы">Посмотреть работы <span aria-hidden="true">↓</span></a></div>
+        <div class="герой-примечание"><span class="примечание-метка">01</span><span>Сначала задача и понятный сценарий. Затем — разработка и согласованный результат.</span></div>
       </div>
-      <figure id="снимок-бота" class="фото-пример">
-        <figcaption><strong>Фрагмент диалога в Telegram.</strong> Видны запрос имени, тестовый ответ и запрос телефона; дальнейшие шаги не показаны.</figcaption>
-        <a href="снимок_фрагмент.png" target="_blank" rel="noopener noreferrer" aria-label="Открыть обрезанный фрагмент диалога в полном размере">
-          <div class="фото-пример__рамка"><img src="снимок_фрагмент.png" alt="Обрезанный фрагмент диалога: запрос имени, тестовый ответ Alex12345 и запрос телефона"></div>
-        </a>
-      </figure>
+      <aside class="герой-образ" aria-label="Три задачи для автоматизации">
+        <div class="образ-рамка"><div class="образ-шапка"><span>Задача / решение</span><span>01—03</span></div><div class="образ-строка"><span class="образ-номер">01</span><span>Заявка</span><span class="образ-стрелка">↘</span></div><div class="образ-строка"><span class="образ-номер">02</span><span>Запись</span><span class="образ-стрелка">↘</span></div><div class="образ-строка"><span class="образ-номер">03</span><span>Отчёт</span><span class="образ-стрелка">↗</span></div><div class="образ-подпись">Сценарий под вашу работу,<br>а не наоборот.</div><span class="образ-блик" aria-hidden="true"></span></div>
+        <p class="образ-лейбл">от задачи<br>к понятному процессу</p>
+      </aside>
     </section>
-    <section id="работы" class="раздел" aria-labelledby="заголовок-работ">
-      <header class="раздел__шапка">
-        <div><h2 id="заголовок-работ">Работы и инструменты</h2></div>
-      </header>
-      <figure id="пример-сценария" class="пример-снимок">
-        <a href="снимок_фрагмент.png" target="_blank" rel="noopener noreferrer" aria-label="Открыть фрагмент диалога в полном размере">
-          <img src="снимок_фрагмент.png" alt="Обрезанный фрагмент диалога: запрос имени, тестовый ответ Alex12345 и запрос телефона">
-        </a>
-        <figcaption>Статичный фрагмент: запрос имени, тестовый ответ и запрос телефона. Телефон и описание задачи в кадре не показаны.</figcaption>
-      </figure>
-      <details class="подробности-работ">
-        <summary>Подробные описания, ограничения и технические детали</summary>
-      <div class="принятые-тексты"><h3>Бот приёма заявок</h3>
-<p>Когда клиент пишет в чат, приходится отдельно уточнять имя, телефон и задачу. Этот бот собирает данные по шагам и сохраняет заявку в базу с CSV-выгрузкой.</p>
-<h3>Направления</h3>
-<p><strong>Telegram-боты</strong> Сценарии для приёма заявок, онлайн-записи и магазина с корзиной — на aiogram 3, с валидацией ввода и хранением данных в SQLite.</p>
-<p><strong>Таблицы из PDF и сканов</strong> На витрине нет кадра результата обработки PDF. Код выбирает между текстовым извлечением через <code>pdfplumber</code> и путем OCR (<code>PaddleOCR</code>, если движок доступен) по порогу в 30 символов на странице, объединяет переносы строк и помечает для ручной проверки строки с низкой уверенностью OCR или расхождением суммы; значения не исправляются автоматически. В папке примера нет исходного PDF, поэтому файл Excel может содержать встроенный образец.</p>
-<h3>Пример: бот приёма заявок</h3>
-<p>Ниже — статичный снимок сценария на вымышленных данных, а не работающая форма или бот. Не вводите настоящие персональные данные.</p>
-<figure class="пример-снимок"><a href="снимок_фрагмент.png" target="_blank" rel="noopener noreferrer" aria-label="Открыть обрезанный фрагмент в полном размере"><img src="снимок_фрагмент.png" alt="Обрезанный фрагмент: запрос имени, тестовый ответ Alex12345 и запрос телефона"></a><figcaption>Снимок сценария бота приёма заявок — статичный фрагмент: запрос имени, тестовый ответ и запрос телефона; шаги с телефоном и описанием задачи здесь не видны.</figcaption></figure>
-<p><strong>Обсудить задачу:</strong> <a href="https://t.me/Partialis">Написать в Telegram</a> · <a href="mailto:Abasbekov2005@yandex.com">Написать по почте</a></p>
-<h3 id="бот-приёма-заявок">Бот приёма заявок</h3>
-<p>Когда обращение приходит в сообщении, данные приходится уточнять и собирать отдельно. Бот собирает имя, телефон и описание задачи, сохраняет заявку в SQLite и формирует CSV-выгрузку.</p>
-<h4>Что видно на кадре и что предусмотрено кодом</h4>
-<p>На кадре показан один фрагмент диалога: бот запрашивает имя, пользователь вводит «Alex12345», бот переходит к запросу телефона. Шаги ввода телефона и описания задачи в кадре отсутствуют. Код собирает три поля: имя (2–60 символов), телефон (нормализуется по числу цифр и префиксу, но не проверяется на существование), описание задачи (5–2000 символов). На шаге описания можно прикрепить фото или документ — в заявку попадают текст подписи и пометка о типе вложения, файл не сохраняется. На любом шаге доступны возврат и отмена.</p>
-<h4>Что внутри</h4>
-<p>Собрано на aiogram 3. Данные сначала записываются в SQLite, затем формируется CSV-выгрузка. При ошибке экспорта код повторяет попытки; если они не помогают, заявка остаётся в базе, попадает во внутреннюю очередь и отправляется на повторную выгрузку. Код также пробует записать её в резервный CSV, но не гарантирует, что файл будет создан.</p>
-<h4>Пример сценария</h4>
-<p>Бот запросил имя, пользователь ответил Alex12345, после чего бот попросил номер телефона, однако дальнейший ход диалога на кадре не показан. Все данные вымышленные. <strong>Важно: введённые данные сохраняются в SQLite, а если в настройках указан получатель, заявка может быть отправлена владельцу бота. Не вводите реальные имя, телефон или другие личные сведения.</strong></p>
-<h3 id="бот-записи-на-услугу">Бот записи на услугу</h3>
-<p>Скриншота сценария на странице нет — ниже описание только кода.</p>
-<ul>
-<li><strong>Встроенный каталог.</strong> При пустой базе код добавляет услуги (с именем, ценой и длительностью) и мастеров в SQLite автоматически.</li>
-<li><strong>Выбор и запись.</strong> Сценарий ведёт пользователя через выбор услуги, мастера, даты и времени; прошедшие и занятые подтверждённые слоты отбрасываются. Занятость проверяется по дате и времени без учёта ID мастера — один занятый слот блокирует тот же момент независимо от мастера.</li>
-<li><strong>Телефон и сохранение.</strong> Номер нормализуется библиотекой <code>phonenumbers</code>; запись создаётся в SQLite внутри транзакции <code>BEGIN IMMEDIATE</code> с повторной проверкой занятости.</li>
-<li><strong>Отмена.</strong> Пользователь может отменить свою подтверждённую запись через кнопку «❌ Мои записи / Отменить».</li>
-</ul>
-<blockquote><p>Реальная услуга и внешний календарь к боту не подключены: каталог содержит встроенные данные, хранилище — внутренняя SQLite-база.</p></blockquote>
-<p><strong>Технологии:</strong> Python, aiogram v3, python-dotenv.</p>
-<h3 id="бот-каталог-и-корзина">Бот-каталог и корзина</h3>
-<p>Скриншота этого бота на странице нет. Ниже — описание того, что делает код.</p>
-<p>Каталог загружается из JSON; если файл недоступен — подставляется встроенный список. Пользователь листает товары, добавляет позиции в корзину, меняет количество, удаляет позиции и переходит к оформлению. Пустую корзину оформить нельзя. Перед оформлением можно ввести промокод <code>START10</code> (регистр и пробелы по краям не важны) — скидка 10%, дробный рубль отбрасывается вниз. Корзины, промокоды и заказы сохраняются в SQLite.</p>
-<p>В ветке кода, где токен платёжного провайдера не задан, счёт не выставляется, деньги не списываются, заказ сохраняется с условным статусом. Ветка с выставлением счёта в коде присутствует, однако подключение провайдера и реальная оплата этим примером не подтверждаются.</p>
-<h3 id="консультант-по-строительным-материалам">Консультант по строительным материалам</h3>
-<p>Трудно найти нужные сведения о материале? Бот подбирает подходящие пункты локальной базы и возвращает ответ с указанием раздела-источника.</p>
-<p>В Telegram-варианте запрос сопоставляется с пунктами локальной базы по совпадению основ слов; заголовки разделов имеют двойной вес. Бот выбирает до четырёх пунктов.</p>
-<p>При низком балле бот отвечает фиксированным отказом без обращения к модели. Иначе выбранные пункты передаются модели, а к ответу приписывается выбранный пункт-источник. Код проверяет допустимость номера источника, но не сверяет содержание ответа с текстом пункта. Поэтому ссылка на источник сама по себе не подтверждает точность ответа или технологическую совместимость материалов.</p>
-<p>Отдельная реализация <code>assistant.py</code> загружает PDF и TXT. При наличии нужных библиотек и API она использует векторный поиск; иначе переключается на локальное сравнение запроса и текстов по нормированным частотам слов (косинусное сходство) с извлечением предложений. Эта реализация не связана кодом с Telegram-вариантом.</p>
-<h3 id="таблицы-из-pdf-и-сканов">Таблицы из PDF и сканов</h3>
-<p>На витрине нет кадра результата обработки PDF.</p>
-<p>Скрипт читает PDF и определяет тип каждой страницы: если извлечённого текста больше 30 символов — обрабатывает через <code>pdfplumber</code>, иначе создаёт изображение и вызывает <code>PaddleOCR</code>, если движок доступен. При недоступном движке или пустом ответе OCR возвращается пустой список.</p>
-<p>Код объединяет переносы строк, проверяет формулу «Количество × Цена = Сумма» и помечает расхождение или низкую уверенность OCR для ручной проверки — исходные значения не исправляются.</p>
-<p>В папке примера нет входного PDF. Если файл отсутствует или строки не получены, скрипт подставляет встроенные образцовые данные и сохраняет их в Excel. Результат обработки реального документа в портфолио не показан.</p>
-<h3>Следующий шаг</h3>
-<p>Если среди примеров нашлось что-то похожее на вашу задачу — или вы хотите рассказать о ней своими словами — просто опишите, что нужно сделать. Разберём вместе.</p>
-<p><a href="#бот-приёма-заявок"><strong>Бот приёма заявок</strong></a> · <a href="#связь"><strong>Обсудить задачу</strong></a></p></div>
-      </details>
-      <h3 class="заголовок-других-работ" id="другие-работы">Сбор карточек каталога</h3>
-      <article class="работа работа--широкая">
-        <span class="работа__тип">Скрипт и данные</span>
-        <h3>Сбор карточек каталога</h3>
-        <figure class="работа__превью"><a href="снимок_каталога.jpg" target="_blank" rel="noopener noreferrer" aria-label="Открыть снимок результата каталога в полном размере"><img src="снимок_каталога.jpg" alt="Результат парсера: таблица каталога товаров с названиями, ценами, наличием и ссылками"></a><figcaption>Снимок результата локального парсера; нажмите, чтобы открыть крупнее.</figcaption></figure>
-        <p class="работа__описание">Локальный парсер использует requests и BeautifulSoup; в хранилище есть сохранённые JSON-данные каталога.</p>
-        <p class="работа__доказательство"><strong>Снимок результата:</strong> <a href="снимок_каталога.jpg" target="_blank" rel="noopener noreferrer">Открыть снимок</a> · <a href="%D1%84%D0%B0%D0%B9%D0%BB%D1%8B/parser.py">Исходный код парсера</a>.</p>
-        <p class="работа__граница">Не проверялись сбор через браузер, одновременный сбор, скорость работы и применение у заказчика.</p>
-      </article>
-      <details class="подробности-работ">
-        <summary>Ещё материалы: описания и локальные опоры без публичных кадров</summary>
-      <h3 class="заголовок-других-работ">Другие материалы</h3>
-      <div class="сетка-работ"><article class="работа" data-case="1">
-          <span class="работа__тип работа__тип--прототип">Прототип · голос</span>
-          <h3>Локальный прототип анализа голосовой записи</h3>
-          <p class="работа__описание">Карточка разработки описывает локальный расчёт темпа речи, доли пауз и разброса основного тона с подбором упражнения.</p>
-          <p class="работа__доказательство"><strong>Опора.</strong> Карточка разработки и заметки о голосе.</p>
-          <p class="работа__граница"><strong>Граница.</strong> Бот не запускался в Telegram и не создавался в BotFather. Возможности за пределами описанного локального прототипа и клиентский эффект не подтверждены.</p>
-        </article><article class="работа" data-case="4">
-          <span class="работа__тип">Скрипт и данные</span>
-          <h3>Сбор карточек каталога</h3>
-          <p class="работа__описание">Локальный парсер использует requests и BeautifulSoup; в хранилище есть сохранённые JSON-данные каталога.</p>
-          <p class="работа__доказательство"><strong>Опора.</strong> <a href="%D1%84%D0%B0%D0%B9%D0%BB%D1%8B/parser.py">Локальный исходник парсера</a> и подготовленные данные.</p>
-          <p class="работа__граница"><strong>Граница.</strong> Не подтверждены CDP, параллельный сбор, скорость, исходные объёмы из старой карточки или клиентское внедрение.</p>
-        </article><article class="работа" data-case="7">
-          <span class="работа__тип">пример · синтетические данные</span>
-          <h3>Образец Excel-дашборда</h3>
-          <p class="работа__описание">В книге есть листы данных, сводки и дашборда; значения на дашборде обозначены как синтетические.</p>
-          <p class="работа__доказательство"><strong>Опора.</strong> <a href="%D1%84%D0%B0%D0%B9%D0%BB%D1%8B/%D0%9E%D0%B1%D1%80%D0%B0%D0%B7%D0%B5%D1%86%20%E2%80%94%20%D0%BE%D1%82%D1%87%D1%91%D1%82%20%D1%81%20%D0%B4%D0%B0%D1%88%D0%B1%D0%BE%D1%80%D0%B4%D0%BE%D0%BC.xlsx">Локальный образец книги Excel</a>.</p>
-          <p class="работа__граница"><strong>Граница.</strong> Не подтверждены экспорт PNG, скорость формирования, сохранённые значения формул или работа на данных заказчика.</p>
-        </article><article class="работа" data-case="8">
-          <span class="работа__тип">Внутренний инструмент · NotebookLM</span>
-          <h3>Поиск источников с NotebookLM</h3>
-          <p class="работа__описание">Локальный исследовательский скрипт отбирает источники и передаёт их NotebookLM для чтения и ответа с цитатами.</p>
-          <p class="работа__доказательство"><strong>Опора.</strong> Локальный скрипт и его отдельный тест.</p>
-          <p class="работа__граница"><strong>Граница.</strong> Не подтверждены корпоративный ассистент по закрытым регламентам и безошибочность цитирования; инфраструктурные замеры не являются бизнес-результатом.</p>
-        </article><article class="работа" data-case="10">
-          <span class="работа__тип">Внутренний инструмент · поиск</span>
-          <h3>Семантический поиск по локальному хранилищу</h3>
-          <p class="работа__описание">Есть локальный инструмент семантического поиска по индексу и отдельный тест.</p>
-          <p class="работа__доказательство"><strong>Опора.</strong> Инструмент и отдельный тест в локальном хранилище.</p>
-          <p class="работа__граница"><strong>Граница.</strong> Не заявляются качество поиска по корпоративной базе, клиентское внедрение или совмещённое время загрузки модели и вычислений.</p>
-        </article><article class="работа работа--широкая" data-case="13">
-          <span class="работа__тип">Два отдельных образца · Bitrix24 / n8n</span>
-          <h3>Примеры Bitrix24 и n8n</h3>
-          <p class="работа__описание">Есть Python-приёмник заявки с проверкой дубля в Bitrix24 и отдельный JSON-сценарий n8n с отправкой данных в Telegram и Google Sheets.</p>
-          <p class="работа__доказательство"><strong>Опора.</strong> Исходник-приёмник, журнал тестового запуска и JSON-сценарий.</p>
-          <p class="работа__граница"><strong>Граница.</strong> Это не единая запущенная цепочка: в JSON n8n нет узла Bitrix24. Не заявляется полная защита от дублей или живое выполнение workflow.</p>
-        </article><article class="работа" data-case="14">
-          <span class="работа__тип работа__тип--прототип">Прототип · тестовые данные</span>
-          <h3>пример сравнения сохранённых цен</h3>
-          <p class="работа__описание">Код сравнивает текущую и сохранённую цену на тестовом наборе данных.</p>
-          <p class="работа__доказательство"><strong>Опора.</strong> Скрипт и локальная история тестовых цен.</p>
-          <p class="работа__граница"><strong>Граница.</strong> Данные синтетические; получение цен с сайтов, уведомления в Telegram и число живых товаров не подтверждены.</p>
-        </article></div>
-      </details>
+    <section class="ситуации секция" id="решения" aria-labelledby="заголовок-ситуаций">
+      <div class="секция-шапка"><p class="надстрочник"><span class="точка"></span> Что можно передать коду</p><h2 id="заголовок-ситуаций">Повторяющиеся задачи<br>можно упростить.</h2></div>
+      <div class="ситуации-сетка">
+        <!-- ТЕКСТ:что-делаю:начало -->
+<article class="ситуация"><span class="ситуация-знак">↗</span><h3>Telegram-боты</h3><p>Бот берёт на себя сценарий, который вы повторяете каждый день: собирает заявку по шагам, ведёт клиента через выбор услуги и времени, показывает каталог с корзиной.</p></article>
+<article class="ситуация"><span class="ситуация-знак">◷</span><h3>Скрипты и данные</h3><p><strong>Таблицы из PDF</strong> — скрипт извлекает табличные данные из PDF-файлов. Текстовые страницы обрабатывает напрямую, сканы — через OCR. Помечает строки, требующие ручной проверки. <strong>Сбор данных с сайтов</strong> — парсер собирает карточки каталога и сохраняет в структурированном виде.</p></article>
+<article class="ситуация"><span class="ситуация-знак">▤</span><h3>Интеграции и отчёты</h3><p><strong>Bitrix24</strong> — приёмник заявок с проверкой дубликатов. <strong>n8n</strong> — сценарий автоматизации: данные с сайта уходят в Telegram и Google Sheets. Excel-книга с листами данных, сводными таблицами и дашбордом.</p></article>
+<!-- ТЕКСТ:что-делаю:конец -->
+      </div>
     </section>
-    <details class="раздел подробности-исполнителя">
-      <summary id="об-исполнителе">Об исполнителе и технологиях</summary>
-      <div class="текст-исполнителя"><h2>Об исполнителе</h2>
-<p>Автоматизирую повторяющиеся рабочие процессы: <a href="#бот-приёма-заявок">приём заявок</a>, <a href="#бот-записи-на-услугу">запись клиентов</a>, <a href="#бот-каталог-и-корзина">каталог, корзина и оформление заказа</a>, <a href="#консультант-по-строительным-материалам">поиск по документам-консультант</a>, <a href="#таблицы-из-pdf-и-сканов">извлечение таблиц из PDF и сканов</a>. Задача в каждом случае одна — убрать ручную работу там, где она воспроизводится по одному и тому же сценарию.</p>
-<h3>На чём это сделано</h3>
-<p>Все боты написаны на <strong>Python</strong> с библиотекой <strong>aiogram 3</strong>.</p>
-<p><strong>FSM-состояния</strong> используются в <a href="#бот-записи-на-услугу">боте записи</a> и <a href="#бот-приёма-заявок">боте заявок</a>: кнопка отмены активна на любом шаге диалога.</p>
-<p><strong>SQLite</strong> хранит заявки в <a href="#бот-приёма-заявок">боте приёма заявок</a> и корзину с заказами в <a href="#бот-каталог-и-корзина">боте магазина</a>. Корзина не пропадает при перезапуске. В боте заявок данные сначала записываются в SQLite, затем формируется CSV-выгрузка. При ошибке экспорта код повторяет попытки, ставит заявку в очередь процесса и пробует записать её в резервный файл. Ошибки записи резервных файлов подавляются, поэтому появление копии не гарантировано; очередь живёт только пока работает процесс.</p>
-<p><strong>Telegram Payments</strong> вызывается только при валидном токене провайдера: бот магазина выполняет <strong>send_invoice</strong> при наличии подходящего токена; если токен отсутствует или не подходит, заказ сохраняется без выставления счёта и без списания средств. Скриншот сценария магазина в <a href="#бот-каталог-и-корзина">разделе бота-каталога</a> не представлен.</p>
-<p>Я разрабатываю инструменты для извлечения <a href="#таблицы-из-pdf-и-сканов">таблиц из PDF и сканов</a> — текстовые страницы обрабатываются напрямую, сканы проходят через OCR-ветку, а представленная таблица построена на встроенных образцовых данных для иллюстрации возможностей кода.</p>
-<p><strong>LangChain</strong> используется в отдельной реализации <a href="#консультант-по-строительным-материалам">консультанта по строительным материалам</a>: она загружает PDF и TXT, ищет по базе и указывает источник. Это отдельный код от Telegram-бота, который обращается к OpenAI-совместимому API.</p></div>
-    </details>
+    <section class="работы секция" id="работы" aria-labelledby="заголовок-работ">
+      <div class="секция-шапка секция-шапка-работы"><div><p class="надстрочник"><span class="точка"></span> Примеры работ</p><h2 id="заголовок-работ">Посмотрите,<br>как это устроено.</h2></div><p class="происхождение">Боты и инструменты обработки данных — в карточках ниже.</p></div>
+      <div class="карточки-работ">
+        <!-- ТЕКСТ:работы:начало -->
+<article class="работа" data-case-id="12"><div class="работа-текст"><p class="работа-мета"><span class="работа-номер">01</span><span>Telegram</span></p><h3>Telegram-боты: заявки, запись и магазин</h3><p class="работа-описание">Клиент нажимает «Оставить заявку» — бот последовательно спрашивает имя, телефон и описание задачи. Выбор услуги → мастер → дата → свободное время → имя и контакт → подтверждение. Каталог товаров с карточками, корзина с управлением количеством, промокод на скидку, оформление заказа.</p></div><div class="работа-медиа работа-медиа-кнопка"><a class="кнопка кнопка-светлая" href="https://t.me/PartialisZayavkiDemoBot" target="_blank" rel="noopener">Заявки <span class="кнопка-стрелка" aria-hidden="true">↗</span></a><a class="кнопка кнопка-светлая" href="https://t.me/PartialisZapisDemoBot" target="_blank" rel="noopener">Запись <span class="кнопка-стрелка" aria-hidden="true">↗</span></a><a class="кнопка кнопка-светлая" href="https://t.me/PartialisMagazinDemoBot" target="_blank" rel="noopener">Магазин <span class="кнопка-стрелка" aria-hidden="true">↗</span></a></div></article>
+<article class="работа" data-case-id="4"><div class="работа-текст"><p class="работа-мета"><span class="работа-номер">02</span><span>Скрипт и данные</span></p><h3>Сбор карточек каталога</h3><p class="работа-описание">Парсер собирает карточки каталога и сохраняет данные в JSON. На снимке — таблица товаров.</p></div><div class="работа-медиа"><figure><img src="снимки/каталог_пример.jpg" alt="Таблица с карточками каталога товаров."><figcaption>Таблица с карточками каталога товаров.</figcaption></figure></div></article>
+<!-- ТЕКСТ:работы:конец -->
+      </div>
+    </section>
+    <section class="процесс секция" id="процесс" aria-labelledby="заголовок-процесса">
+      <div class="секция-шапка"><p class="надстрочник"><span class="точка"></span> Как устроена работа</p><h2 id="заголовок-процесса">От задачи<br>к готовому решению.</h2></div>
+      <ol class="этапы">
+        <!-- ТЕКСТ:процесс:начало -->
+<li><span class="этап-номер">01</span><div><h3>Вы описываете задачу</h3><p>что нужно автоматизировать, какой сценарий, куда должны попадать данные.</p></div></li>
+<li><span class="этап-номер">02</span><div><h3>Разбираем вместе</h3><p>уточняю детали, предлагаю решение, обсуждаем объём.</p></div></li>
+<li><span class="этап-номер">03</span><div><h3>Разработка</h3><p>пишу код, показываю промежуточный результат.</p></div></li>
+<li><span class="этап-номер">04</span><div><h3>Передача</h3><p>условия передачи и состав поставки обсуждаем на втором шаге.</p></div></li>
+<!-- ТЕКСТ:процесс:конец -->
+      </ol>
+    </section>
+    <section class="стоимость секция" aria-labelledby="заголовок-стоимости">
+      <div class="стоимость-текст"><p class="надстрочник"><span class="точка"></span> Стоимость</p><h2 id="заголовок-стоимости">Обсудим объём.<br><em>Затем оценку.</em></h2>
+        <!-- ТЕКСТ:стоимость:начало -->
+<p>Стоимость обсудим после того, как определим сценарий, данные и нужные подключения.</p>
+<!-- ТЕКСТ:стоимость:конец -->
+      </div>
+      <a class="кнопка кнопка-тёмная" href="https://t.me/Partialis" target="_blank" rel="noopener">Обсудить объём <span class="кнопка-стрелка" aria-hidden="true">↗</span></a>
+    </section>
+    <section class="контакт секция" id="контакт" aria-labelledby="заголовок-контакта">
+      <div class="контакт-карточка"><div class="контакт-верх"><p class="надстрочник"><span class="точка"></span> Следующий шаг</p><span class="контакт-индекс">partialis</span></div><h2 id="заголовок-контакта">Расскажите,<br>что хотите упростить.</h2><div class="контакт-низ">
+        <!-- ТЕКСТ:контакт:начало -->
+<p>Я делаю Telegram-ботов и скрипты, которые убирают ручную работу из повторяющихся процессов.</p><p>Напишите, что хотите автоматизировать, — разберём задачу вместе.</p><p class="контакт-ссылки"><a href="https://t.me/Partialis" target="_blank" rel="noopener">Написать в Telegram ↗</a> · <a href="mailto:Abasbekov2005@yandex.com">Написать по почте</a></p>
+<!-- ТЕКСТ:контакт:конец -->
+        <a class="кнопка кнопка-тёмная" href="https://t.me/Partialis" target="_blank" rel="noopener">Написать в Telegram <span class="кнопка-стрелка" aria-hidden="true">↗</span></a>
+      </div></div>
+      <div class="вопросы"><p class="надстрочник"><span class="точка"></span> Коротко о важном</p>
+        <!-- ТЕКСТ:вопросы:начало -->
+<details><summary>С чего начать?</summary><p>Опишите, что сейчас делаете вручную и какой результат хотите получить.</p></details>
+<details><summary>Как определяется стоимость?</summary><p>Сначала разберём сценарий, данные и нужные подключения, затем обсудим объём работ.</p></details>
+<details><summary>Что останется после работы?</summary><p>Состав результата и формат передачи согласуем до начала работы.</p></details>
+<details><summary>С какими задачами можно обратиться?</summary><p>Боты, обработка данных, парсеры каталогов и интеграции между сервисами.</p></details>
+<!-- ТЕКСТ:вопросы:конец -->
+      </div>
+    </section>
   </main>
-  <footer id="связь" class="подвал обёртка">
-    <div><span class="метка">Связь</span><p class="подвал__оговорка">Если среди примеров нашлось что-то похожее на вашу задачу — или вы хотите рассказать о ней своими словами — просто опишите, что нужно сделать. Разберём вместе.</p></div>
-    <div class="подвал__ссылки"><a href="https://t.me/Partialis" target="_blank" rel="noopener noreferrer">Написать в Telegram ↗</a><a href="mailto:Abasbekov2005@yandex.com">Написать по почте ↗</a></div>
-  </footer>
+  <footer class="подвал"><a class="логотип" href="#начало"><span class="логотип-знак">p.</span><span>partialis</span></a><span>Боты, скрипты и интеграции</span><a href="https://t.me/Partialis" target="_blank" rel="noopener">Telegram ↗</a></footer>
 </body>
 </html>
