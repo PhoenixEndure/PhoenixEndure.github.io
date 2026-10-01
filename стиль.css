@@ -187,16 +187,15 @@ h1 em, h2 em { color: #627b3a; font-weight: 400; }
   .стоимость { margin-inline: -16px; padding-inline: 16px; }
 }
 
-/* Карточки услуг: стоимость остаётся заметной на телефоне и выравнивается по низу. */
+/* Карточки услуг: результат, граница объёма и цена читаются без раскрытия. */
+.услуга-предел { margin: 14px 0 0 !important; padding-top: 12px !important; border-top: 1px solid var(--линия); color: var(--приглушённый) !important; font-size: 14px; line-height: 1.45; }
 .услуга-цена { margin-top: auto !important; padding-top: 16px !important; color: var(--чернила) !important; font-size: 18px !important; font-weight: 800; letter-spacing: -.02em; }
 @media (max-width: 700px) {
-  .ситуации-сетка { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .ситуация.услуга { min-height: 0; padding: 16px; border-radius: 16px; }
+  .ситуации-сетка { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .ситуация.услуга { min-height: 0; padding: 20px; border-radius: 16px; }
   .услуга .ситуация-знак { width: 28px; height: 28px; margin-bottom: 15px; }
-  .услуга h3 { margin-bottom: 8px; font-size: 16px; line-height: 1.16; }
-  .услуга p { font-size: 12px; line-height: 1.4; }
-  .услуга .услуга-цена { padding-top: 12px !important; font-size: 15px !important; }
-}
-@media (max-width: 359px) {
-  .ситуации-сетка { grid-template-columns: minmax(0, 1fr); }
+  .услуга h3 { max-width: 100%; margin-bottom: 8px; font-size: 21px; line-height: 1.2; }
+  .услуга p { font-size: 16px; line-height: 1.5; }
+  .услуга .услуга-предел { margin-top: 12px !important; font-size: 15px; }
+  .услуга .услуга-цена { padding-top: 12px !important; font-size: 18px !important; }
 }
