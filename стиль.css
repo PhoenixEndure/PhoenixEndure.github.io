@@ -56,7 +56,7 @@ h1 em, h2 em { color: #627b3a; font-weight: 400; }
 .образ-стрелка { color: var(--зелёный); font-size: 20px; }
 .образ-подпись { padding-top: 26px; color: #d1dbc8; font-family: var(--заголовок); font-size: 21px; line-height: 1.25; }
 .образ-блик { position: absolute; width: 170px; height: 170px; right: -92px; bottom: -98px; border: 1px solid rgba(215,240,91,.6); border-radius: 50%; box-shadow: 0 0 0 18px rgba(215,240,91,.08), 0 0 0 36px rgba(215,240,91,.05); }
-.образ-лейбл { position: absolute; right: 0; bottom: -19px; margin: 0; color: var(--приглушённый); font-size: 10px; line-height: 1.35; text-transform: uppercase; letter-spacing: .12em; }
+.образ-лейбл { position: static; margin: 12px 6px 0; text-align: right; color: var(--приглушённый); font-size: 10px; line-height: 1.35; text-transform: uppercase; letter-spacing: .12em; }
 .секция { padding-block: clamp(74px, 10vw, 138px); }
 .секция-шапка { margin-bottom: 40px; }
 .секция-шапка h2, .стоимость h2, .контакт h2 { margin: 18px 0 0; font-size: clamp(39px, 5.4vw, 72px); line-height: 1.02; }
@@ -131,7 +131,7 @@ h1 em, h2 em { color: #627b3a; font-weight: 400; }
   .герой-образ { width: min(100%, 430px); justify-self: center; padding: 8px 8px 20px; }
   .образ-рамка { min-height: 300px; padding: 18px 20px 22px; }
   .образ-строка { min-height: 51px; }
-  .образ-лейбл { right: 8px; bottom: -2px; }
+  .образ-лейбл { margin: 10px 8px 0; }
   .секция { padding-block: 76px; }
   .секция-шапка { margin-bottom: 28px; }
   .секция-шапка h2, .стоимость h2, .контакт h2 { font-size: clamp(37px, 9vw, 52px); }
