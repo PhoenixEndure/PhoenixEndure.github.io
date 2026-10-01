@@ -74,13 +74,17 @@ h1 em, h2 em { color: #627b3a; font-weight: 400; }
 .работы .точка { background: var(--зелёный); }
 .работы h2 { color: #f5f3ec; }
 .происхождение { max-width: 315px; margin: 0 0 5px; color: #b7c3b4; font-size: 13px; }
-.карточки-работ { display: grid; gap: 22px; }
+.карточки-работ { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .работа { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(25px, 5vw, 72px); padding: 22px; border: 1px solid rgba(245,243,236,.22); border-radius: 28px; background: rgba(245,243,236,.035); }
 .работа:nth-child(even) { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
 .работа:nth-child(even) .работа-медиа { order: -1; }
 .работа-текст { padding: clamp(4px, 2vw, 24px); }
 .работа-мета { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: #bfccbc; font-size: 10px; text-transform: uppercase; letter-spacing: .13em; }
 .работа-номер { color: var(--зелёный); }
+.работа-бот { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 14px; }
+.работа-бот:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+.работа-бот:nth-child(even) .работа-медиа { order: 0; }
+.работа-каталог { grid-column: 1 / -1; }
 .работа h3 { margin: 18px 0 13px; color: #f5f3ec; font-family: var(--заголовок); font-size: clamp(30px, 3vw, 43px); font-weight: 500; line-height: 1.05; letter-spacing: -.04em; }
 .работа-описание { max-width: 500px; margin: 0 0 17px; color: #d1d9cf; font-size: 15px; }
 .работа-предел { max-width: 500px; margin: 0; padding-top: 14px; border-top: 1px solid rgba(245,243,236,.18); color: #acb9ad; font-size: 12px; }
@@ -120,6 +124,10 @@ h1 em, h2 em { color: #627b3a; font-weight: 400; }
 .подвал { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-top: 1px solid var(--линия); }
 .подвал > span { color: var(--приглушённый); font-size: 12px; }
 :focus-visible { outline: 3px solid #70843f; outline-offset: 4px; }
+@media (max-width: 980px) {
+  .карточки-работ { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 760px) {
   .шапка, main, .подвал { width: calc(100% - 40px); }
   .шапка { min-height: 66px; }
@@ -143,7 +151,8 @@ h1 em, h2 em { color: #627b3a; font-weight: 400; }
   .работы { width: calc(100% + 40px); margin-left: -20px; padding-inline: 20px; }
   .секция-шапка-работы { display: block; }
   .происхождение { margin-top: 22px; }
-  .карточки-работ { gap: 14px; }
+  .карточки-работ { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .работа-каталог { grid-column: auto; }
   .работа, .работа:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 21px; padding: 12px; border-radius: 22px; }
   .работа-текст { padding: 12px 8px 4px; }
   .работа h3 { font-size: 34px; }
@@ -151,6 +160,7 @@ h1 em, h2 em { color: #627b3a; font-weight: 400; }
   .работа-предел { font-size: 12px; }
   .работа:nth-child(even) .работа-медиа { order: 0; }
   .работа-медиа { padding: 6px; border-radius: 17px; }
+  .работа-бот .работа-медиа { padding: 3px; }
   .работа-медиа figure { border-radius: 12px; }
   .работа-медиа figcaption { font-size: 10px; }
   .этапы li { grid-template-columns: 42px minmax(0, 1fr); gap: 8px; padding: 20px 0; }
